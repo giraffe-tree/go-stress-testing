@@ -37,16 +37,10 @@ func WebSocketJson(request *model.Request, seq string, msg []byte) (code int, is
 		code = model.ParseError
 		fmt.Printf("请求结果 json.Unmarshal msg:%s err:%v", string(msg), err)
 	} else {
-
-		if seq != responseJson.Seq {
-			code = model.ParseError
-			fmt.Println("请求和返回seq不一致 ~请求:", seq, responseJson.Seq, string(msg))
-		} else {
-			code = responseJson.Response.Code
-			// body 中code返回200为返回数据成功
-			if code == 200 {
-				isSucceed = true
-			}
+		code = responseJson.Response.Code
+		// body 中code返回200为返回数据成功
+		if code == 200 {
+			isSucceed = true
 		}
 	}
 

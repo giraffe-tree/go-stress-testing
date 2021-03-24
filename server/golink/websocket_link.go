@@ -18,8 +18,8 @@ import (
 )
 
 const (
-	firstTime    = 1 * time.Second // 连接以后首次请求数据的时间
-	intervalTime = 1 * time.Second // 发送数据的时间间隔
+	firstTime    = 5 * time.Second // 连接以后首次请求数据的时间
+	intervalTime = 5 * time.Second // 发送数据的时间间隔
 )
 
 var (
