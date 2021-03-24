@@ -14,6 +14,8 @@ import (
 	"go-stress-testing/server/golink"
 	"go-stress-testing/server/statistics"
 	"go-stress-testing/server/verify"
+	"math/rand"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -45,7 +47,8 @@ func Dispose(concurrency, totalNumber uint64, request *model.Request) {
 
 	wgReceiving.Add(1)
 	go statistics.ReceivingResults(concurrency, ch, &wgReceiving)
-
+	rand.Seed(time.Now().UTC().UnixNano())
+	hash := strconv.Itoa(rand.Intn(10000)) + "_"
 	for i := uint64(0); i < concurrency; i++ {
 		wg.Add(1)
 		switch request.Form {
@@ -58,11 +61,11 @@ func Dispose(concurrency, totalNumber uint64, request *model.Request) {
 			switch connectionMode {
 			case 1:
 				// 连接以后再启动协程
-				ws := client.NewWebSocket(request.Url)
+				curUrl := request.Url + "?id=" + hash + strconv.FormatInt(int64(i), 10)
+				ws := client.NewWebSocket(curUrl)
 				err := ws.GetConn()
 				if err != nil {
 					fmt.Println("连接失败:", i, err)
-
 					continue
 				}
 
